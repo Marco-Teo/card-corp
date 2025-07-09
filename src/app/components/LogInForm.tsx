@@ -1,4 +1,3 @@
-// src/app/components/LogInForm.tsx
 "use client";
 
 import { useState, FormEvent } from "react";

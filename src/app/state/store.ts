@@ -3,6 +3,7 @@ import userReducer from './userSlice';
 import menuReducer from './menuSlice';
 import cartaReducer from './cartaSlice';
 import logInReducer from './logInSlice';
+import cartReducer from './cartSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     menu: menuReducer,
     carta: cartaReducer,
     logIn: logInReducer,
+    cart: cartReducer
   },
 });
 

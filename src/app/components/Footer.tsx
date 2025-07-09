@@ -14,12 +14,16 @@ const navigation = {
     { name: "Submit ticket", href: "#" },
     { name: "Documentation", href: "#" },
     { name: "Guides", href: "#" },
+    { name: "Cookie Policy", href: "#" },
+    { name: "Privacy Policy", href: "#" },
+    { name: "Payments, fees and refunds", href: "#" },
+    { name: "Shipping methods", href: "#" },
+    { name: "Contact us", href: "#" },
   ],
   company: [
     { name: "About", href: "#" },
     { name: "Blog", href: "#" },
-    { name: "Jobs", href: "#" },
-    { name: "Press", href: "#" },
+    { name: "Legal office", href: "#" },
   ],
   legal: [
     { name: "Terms of service", href: "#" },

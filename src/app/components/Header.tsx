@@ -1,3 +1,4 @@
+// src/app/components/Header.tsx
 "use client";
 
 import { useState } from "react";
@@ -8,11 +9,14 @@ import { RootState, AppDispatch } from "../state/store";
 import { toggleMenu } from "../state/menuSlice";
 import LogInDropdown from "./LogInDropdown";
 import LogInForm from "./LogInForm";
+import Cart from "./Cart";
 
 export default function Header() {
   const isLoggedIn = useSelector((state: RootState) => state.logIn.isLoggedIn);
   const dispatch = useDispatch<AppDispatch>();
+
   const [showLogin, setShowLogin] = useState(false);
+  const [showCart, setShowCart] = useState(false);
 
   const handleProfileClick = () => {
     if (isLoggedIn) {
@@ -37,10 +41,13 @@ export default function Header() {
         </div>
 
         <div className="flex items-center space-x-8 ml-12 flex-shrink-0">
-          <Link href="/cart">
-            <FiShoppingCart className="text-blue-700" size={24} />
-          </Link>
-
+          <button
+            onClick={() => setShowCart(true)}
+            className="text-blue-700 hover:text-blue-800"
+            aria-label="Apri carrello"
+          >
+            <FiShoppingCart size={24} />
+          </button>
           <div className="relative">
             <button
               onClick={handleProfileClick}
@@ -49,7 +56,6 @@ export default function Header() {
             >
               <FiUser size={20} />
             </button>
-
             <LogInDropdown />
 
             {showLogin && (
@@ -68,6 +74,20 @@ export default function Header() {
           </div>
         </div>
       </div>
+
+      {showCart && (
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          onClick={() => setShowCart(false)}
+        >
+          <div
+            className="bg-white w-full max-w-md p-6 rounded-md shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Cart />
+          </div>
+        </div>
+      )}
     </header>
   );
 }

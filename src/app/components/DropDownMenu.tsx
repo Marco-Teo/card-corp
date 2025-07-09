@@ -12,7 +12,7 @@ export default function DropDownMenu({
 }: DropDownMenuProps) {
   return (
     <>
-      <label className="block text-sm font-medium text-white mb-2">
+      <label className="block text-sm font-medium text-black mb-2">
         {label}
       </label>
       <Menu as="div" className="relative inline-block text-left">
