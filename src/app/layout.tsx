@@ -32,6 +32,7 @@ export default function RootLayout({
         <Providers>
           <Header />
           <FilterBar />
+
           {children}
           <Footer />
         </Providers>

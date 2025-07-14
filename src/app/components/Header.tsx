@@ -1,8 +1,6 @@
-// src/app/components/Header.tsx
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { FiShoppingCart, FiSearch, FiUser } from "react-icons/fi";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../state/store";
@@ -81,7 +79,7 @@ export default function Header() {
           onClick={() => setShowCart(false)}
         >
           <div
-            className="bg-white w-full max-w-md p-6 rounded-md shadow-lg"
+            className="bg-white w-full max-w-lg p-6 rounded-md shadow-lg no-scrollbar overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <Cart />

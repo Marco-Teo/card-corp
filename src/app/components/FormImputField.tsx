@@ -22,7 +22,7 @@ export default function FormImputField({
   const IconComponent = iconMap[iconName];
   console.log("IconComponent:", IconComponent);
   return (
-    <div className="flex flex-col w-full lg:w-auto">
+    <div className="flex flex-col ">
       <label className="block text-sm/6 font-medium text-blue-700">
         {label}
       </label>

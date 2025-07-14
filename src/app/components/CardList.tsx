@@ -23,8 +23,21 @@ export default function CardList() {
     fetchCarte();
   }, [dispatch]);
 
-  const handleToggleFavorite = (id: number) => {
-    dispatch(toggleFavorite(id));
+  const handleToggleFavorite = async (id: number) => {
+    const isFav = favorites.includes(id);
+    const method = isFav ? "DELETE" : "POST";
+    const url = `http://localhost:8080/api/carte/${id}/preferita`;
+
+    try {
+      const resp = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      dispatch(toggleFavorite(id));
+    } catch (err) {
+      console.error("Impossibile aggiornare i preferiti:", err);
+    }
   };
 
   function addToCart(card: Carta) {

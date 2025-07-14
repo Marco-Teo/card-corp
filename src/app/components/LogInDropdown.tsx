@@ -2,6 +2,7 @@
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../state/store";
+
 import { toggleMenu } from "../state/menuSlice";
 import { logOut } from "../state/logInSlice";
 import {
@@ -13,6 +14,7 @@ import {
   FiBox,
   FiLogOut,
 } from "react-icons/fi";
+import Link from "next/link";
 
 export default function LogInDropdown() {
   const open = useSelector((state: RootState) => state.menu.open);
@@ -46,12 +48,14 @@ export default function LogInDropdown() {
       >
         <FiInfo className="mr-2 text-blue-600" /> informazioni
       </a>
-      <a
-        href="#"
+      <Link
+        prefetch={false}
+        href="/preferiti"
         className="flex items-center px-3 py-2 hover:bg-gray-100 text-black"
       >
-        <FiHeart className="mr-2 text-blue-600" /> preferiti
-      </a>
+        <FiHeart className="mr-2 text-blue-600" /> Preferiti
+      </Link>
+
       <a
         href="#"
         className="flex items-center px-3 py-2 hover:bg-gray-100 text-black"
