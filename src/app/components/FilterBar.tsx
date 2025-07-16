@@ -57,7 +57,7 @@ export default function FiltersBar() {
 
             <button
               type="button"
-              className="rounded-full bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-blue-100 w-50 hover:text-black"
+              className="rounded-full bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-blue-100 w-50 hover:text-black mx-auto lg:mx-0 "
             >
               Cerca
             </button>

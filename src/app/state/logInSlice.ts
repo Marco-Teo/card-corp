@@ -7,7 +7,7 @@ interface LogInState {
 }
 
 const initialState: LogInState = {
-  isLoggedIn: true,
+  isLoggedIn: false,
   username: "",
   token: "",
 };

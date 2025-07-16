@@ -9,8 +9,6 @@ import {
   type Carta as CartaType,
 } from "../state/cartaSlice";
 import { addItem } from "../state/cartSlice";
-import FiltersBar from "../components/FilterBar";
-import Footer from "../components/Footer";
 import { FaHeart } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { LiaCartPlusSolid } from "react-icons/lia";

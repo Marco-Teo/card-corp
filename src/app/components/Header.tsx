@@ -8,6 +8,7 @@ import { toggleMenu } from "../state/menuSlice";
 import LogInDropdown from "./LogInDropdown";
 import LogInForm from "./LogInForm";
 import Cart from "./Cart";
+import Link from "next/link";
 
 export default function Header() {
   const isLoggedIn = useSelector((state: RootState) => state.logIn.isLoggedIn);
@@ -27,7 +28,9 @@ export default function Header() {
   return (
     <header className="bg-white border-b shadow-sm">
       <div className="container mx-auto flex items-center px-6 py-3">
-        <img src="/MARCO1.svg" alt="logo" className="w-20 h-20" />
+        <Link href="/">
+          <img src="/MARCO1.svg" alt="logo" className="w-20 h-20" />
+        </Link>
 
         <div className="flex-grow mx-12 relative">
           <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-white" />

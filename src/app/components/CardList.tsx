@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Carta, setCarte, toggleFavorite } from "../state/cartaSlice";
 import type { RootState, AppDispatch } from "../state/store";
@@ -8,17 +8,31 @@ import { LiaCartPlusSolid } from "react-icons/lia";
 import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import { addItem } from "../state/cartSlice";
+import LoadingSpinner from "./LoadingSpinner";
 
 export default function CardList() {
   const dispatch = useDispatch<AppDispatch>();
   const carte = useSelector((state: RootState) => state.carta.carte);
   const favorites = useSelector((state: RootState) => state.carta.favorites);
 
+  const bgByRarita: Record<string, string> = {
+    COMMON: "bg-gray-700",
+    UNCOMMON: "bg-green-700",
+    SUPER_RARE: "bg-blue-700",
+    SECRET_RARE: "bg-purple-700",
+    GOD_RARE: "bg-yellow-300",
+    ALTERNATE: "bg-pink-200",
+    LEADER: "bg-red-700",
+  };
+
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchCarte = async () => {
-      const response = await fetch("http://localhost:8080/api/carte");
-      const data = await response.json();
+      const resp = await fetch("http://localhost:8080/api/carte");
+      const data: Carta[] = await resp.json();
       dispatch(setCarte(data));
+      setTimeout(() => setLoading(false), 1000);
     };
     fetchCarte();
   }, [dispatch]);
@@ -27,70 +41,65 @@ export default function CardList() {
     const isFav = favorites.includes(id);
     const method = isFav ? "DELETE" : "POST";
     const url = `http://localhost:8080/api/carte/${id}/preferita`;
-
     try {
-      const resp = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-      });
+      const resp = await fetch(url, { method });
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       dispatch(toggleFavorite(id));
-    } catch (err) {
-      console.error("Impossibile aggiornare i preferiti:", err);
+    } catch (e) {
+      console.error("Impossibile aggiornare i preferiti:", e);
     }
   };
 
-  function addToCart(card: Carta) {
-    const newCartItem = {
-      id: card.id,
-      nome: card.nome,
-      descrizione: card.descrizione,
-      urlImmagine: card.urlImmagine,
-      prezzo: card.prezzo,
-      quantita: 1,
-    };
-    dispatch(addItem(newCartItem));
+  const handleAddToCart = (c: Carta) =>
+    dispatch(addItem({ ...c, quantita: 1 }));
+
+  if (loading) {
+    return (
+      <div className=" flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   return (
-    <>
-      {carte.map((carta) => {
-        const isFav = favorites.includes(carta.id);
+    <div className="container mx-auto py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {carte.map((c) => {
+        const isFav = favorites.includes(c.id);
+        const bgColor = bgByRarita[c.rarita] || "bg-blue-700";
+
         return (
-          <div key={carta.id} className="bg-blue-700 p-4 rounded-lg shadow-md">
+          <div key={c.id} className={`${bgColor} p-4 rounded-lg shadow-md`}>
             <div className="relative flex justify-center p-4 bg-white rounded-t-lg shadow-sm">
               <button
-                onClick={() => handleToggleFavorite(carta.id)}
+                onClick={() => handleToggleFavorite(c.id)}
                 className="absolute top-2 right-2"
               >
                 {isFav ? (
-                  <FaHeart size={24} className="text-blue-700 cursor-pointer" />
+                  <FaHeart size={24} className="text-blue-700" />
                 ) : (
-                  <CiHeart size={24} className="text-blue-700 cursor-pointer" />
+                  <CiHeart size={24} className="text-blue-700" />
                 )}
               </button>
               <img
+                src={c.urlImmagine || "https://via.placeholder.com/150"}
+                alt={c.nome}
                 className="h-48 object-contain"
-                src={carta.urlImmagine || "https://via.placeholder.com/150"}
-                alt={carta.nome}
               />
             </div>
 
             <div className="p-5 bg-white">
-              <h5 className="mb-2 text-xl font-bold tracking-tight text-black">
-                {carta.nome}
-              </h5>
-              <p className="mb-1 text-black">
-                Descrizione: {carta.descrizione}
+              <h5 className="mb-2 text-xl font-bold text-black">{c.nome}</h5>
+              <p className="mb-1 text-black">{c.descrizione}</p>
+              <p className="mb-3 text-black">
+                Rarità: {c.rarita.replace(/_/g, " ")}
               </p>
-              <p className="mb-3 text-black">Rarità: {carta.rarita}</p>
             </div>
 
             <div className="flex justify-between items-center p-3 bg-white rounded-b-lg">
-              <p className="text-black">Prezzo: € {carta.prezzo.toFixed(2)}</p>
+              <p className="text-black">€ {c.prezzo.toFixed(2)}</p>
               <button
-                onClick={() => addToCart(carta)}
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-700 text-white text-xl hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer"
+                onClick={() => handleAddToCart(c)}
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-700 text-white text-xl hover:bg-blue-800"
               >
                 <LiaCartPlusSolid size={20} />
               </button>
@@ -98,6 +107,6 @@ export default function CardList() {
           </div>
         );
       })}
-    </>
+    </div>
   );
 }
