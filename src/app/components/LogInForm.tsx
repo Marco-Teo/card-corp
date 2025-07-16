@@ -4,7 +4,7 @@ import { useState, FormEvent } from "react";
 import { useDispatch } from "react-redux";
 import { logIn } from "../state/logInSlice";
 import { AppDispatch } from "../state/store";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface LogInFormProps {
   onClose: () => void;
@@ -15,6 +15,7 @@ export default function LogInForm({ onClose }: LogInFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -42,6 +43,11 @@ export default function LogInForm({ onClose }: LogInFormProps) {
       console.error("Login fallito:", e);
       setError(e.message || "Login fallito, riprova.");
     }
+  };
+
+  const goToRegister = () => {
+    onClose();
+    router.push("/registrazione");
   };
 
   return (
@@ -124,14 +130,14 @@ export default function LogInForm({ onClose }: LogInFormProps) {
             )}
           </form>
 
-          <p className="mt-10 text-center text-sm/6 text-gray-500">
+          <p className="mt-10 text-center text-sm text-gray-500">
             Non sei ancora registrato?{" "}
-            <Link
-              href="/registrazione"
+            <button
+              onClick={goToRegister}
               className="font-semibold text-indigo-600 hover:text-indigo-500"
             >
               Iscriviti
-            </Link>
+            </button>
           </p>
         </div>
       </div>
