@@ -4,6 +4,7 @@ import menuReducer from './menuSlice';
 import cartaReducer from './cartaSlice';
 import logInReducer from './logInSlice';
 import cartReducer from './cartSlice';
+import filterReducer from './filterSlice';
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ export const store = configureStore({
     menu: menuReducer,
     carta: cartaReducer,
     logIn: logInReducer,
-    cart: cartReducer
+    cart: cartReducer,
+    filters : filterReducer,
   },
 });
 

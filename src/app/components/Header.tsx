@@ -9,13 +9,15 @@ import LogInDropdown from "./LogInDropdown";
 import LogInForm from "./LogInForm";
 import Cart from "./Cart";
 import Link from "next/link";
+import LogInDropDownAdmin from "./LogInDropDownAdmin";
 
 export default function Header() {
-  const isLoggedIn = useSelector((state: RootState) => state.logIn.isLoggedIn);
+  const { isLoggedIn } = useSelector((state: RootState) => state.logIn);
   const dispatch = useDispatch<AppDispatch>();
 
   const [showLogin, setShowLogin] = useState(false);
   const [showCart, setShowCart] = useState(false);
+  const role = useSelector((s: RootState) => s.logIn.role);
 
   const handleProfileClick = () => {
     if (isLoggedIn) {
@@ -24,7 +26,6 @@ export default function Header() {
       setShowLogin(true);
     }
   };
-
   return (
     <header className="bg-white border-b shadow-sm">
       <div className="container mx-auto flex items-center px-6 py-3">
@@ -57,7 +58,11 @@ export default function Header() {
             >
               <FiUser size={20} />
             </button>
-            <LogInDropdown />
+            {role === "ADMIN" ? (
+              <LogInDropDownAdmin onClose={() => dispatch(toggleMenu())} />
+            ) : (
+              <LogInDropdown onClose={() => dispatch(toggleMenu())} />
+            )}
 
             {showLogin && (
               <div

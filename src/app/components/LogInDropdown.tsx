@@ -2,7 +2,6 @@
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../state/store";
-
 import { toggleMenu } from "../state/menuSlice";
 import { logOut } from "../state/logInSlice";
 import {
@@ -16,7 +15,11 @@ import {
 } from "react-icons/fi";
 import Link from "next/link";
 
-export default function LogInDropdown() {
+interface Props {
+  onClose: () => void;
+}
+
+export default function LogInDropdown({ onClose }: Props) {
   const open = useSelector((state: RootState) => state.menu.open);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -24,6 +27,7 @@ export default function LogInDropdown() {
 
   const handleClick = () => {
     dispatch(toggleMenu());
+    onClose();
   };
 
   return (

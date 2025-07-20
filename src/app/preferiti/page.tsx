@@ -27,6 +27,7 @@ export default function Preferiti() {
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const data: CartaType[] = await resp.json();
         dispatch(setCarte(data));
+        data.forEach((c) => dispatch(toggleFavorite(c.id)));
       } catch (e) {
         console.error("Errore fetch preferiti:", e);
       }
@@ -53,6 +54,16 @@ export default function Preferiti() {
     dispatch(addItem({ ...c, quantita: 1 }));
   };
 
+  const bgByRarita: Record<string, string> = {
+    COMMON: "bg-gray-700",
+    UNCOMMON: "bg-green-700",
+    SUPER_RARE: "bg-blue-700",
+    SECRET_RARE: "bg-purple-700",
+    GOD_RARE: "bg-yellow-300",
+    ALTERNATE: "bg-pink-700",
+    LEADER: "bg-red-700",
+  };
+
   return (
     <div className="bg-white py-8 flex flex-col min-h-screen">
       <div className="container mx-auto px-4 mb-6">
@@ -71,10 +82,11 @@ export default function Preferiti() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {cartePreferite.map((carta) => {
               const isFav = favorites.includes(carta.id);
+              const bgColor = bgByRarita[carta.rarita] || "bg-gray-500";
               return (
                 <div
                   key={carta.id}
-                  className="bg-blue-700 p-4 rounded-lg shadow-md"
+                  className={`${bgColor} p-4 rounded-lg shadow-md`}
                 >
                   <div className="relative flex justify-center p-4 bg-white rounded-t-lg shadow-sm">
                     <button
@@ -82,12 +94,12 @@ export default function Preferiti() {
                       className="absolute top-2 right-2"
                     >
                       {isFav ? (
-                        <FaHeart
+                        <CiHeart
                           size={24}
                           className="text-blue-700 cursor-pointer"
                         />
                       ) : (
-                        <CiHeart
+                        <FaHeart
                           size={24}
                           className="text-blue-700 cursor-pointer"
                         />
@@ -108,7 +120,9 @@ export default function Preferiti() {
                     <p className="text-black mb-1">
                       Descrizione: {carta.descrizione}
                     </p>
-                    <p className="text-black mb-3">Rarità: {carta.rarita}</p>
+                    <p className="text-black mb-3">
+                      Rarità: {carta.rarita.replace(/_/g, " ")}
+                    </p>
                   </div>
                   <div className="flex justify-between items-center p-3 bg-white rounded-b-lg">
                     <p className="text-black">€ {carta.prezzo.toFixed(2)}</p>

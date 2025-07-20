@@ -14,6 +14,7 @@ export default function CardList() {
   const dispatch = useDispatch<AppDispatch>();
   const carte = useSelector((state: RootState) => state.carta.carte);
   const favorites = useSelector((state: RootState) => state.carta.favorites);
+  const filters = useSelector((state: RootState) => state.filters);
 
   const bgByRarita: Record<string, string> = {
     COMMON: "bg-gray-700",
@@ -29,20 +30,55 @@ export default function CardList() {
 
   useEffect(() => {
     const fetchCarte = async () => {
-      const resp = await fetch("http://localhost:8080/api/carte");
+      setLoading(true);
+
+      const hasFilters =
+        filters.nome !== "" ||
+        filters.rarita !== "" ||
+        filters.order !== "" ||
+        filters.prezzoMin !== 0 ||
+        filters.prezzoMax !== 999999999;
+
+      let resp;
+      if (hasFilters) {
+        const payload = {
+          nome: filters.nome,
+          rarita: filters.rarita,
+          min: filters.prezzoMin,
+          max: filters.prezzoMax,
+          ordine: filters.order,
+        };
+        resp = await fetch("http://localhost:8080/api/carte/search", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } else {
+        resp = await fetch("http://localhost:8080/api/carte");
+      }
+
+      if (!resp.ok) {
+        console.error(`Fetch error: HTTP ${resp.status}`);
+        setLoading(false);
+        return;
+      }
+
       const data: Carta[] = await resp.json();
       dispatch(setCarte(data));
-      setTimeout(() => setLoading(false), 1000);
+      setLoading(false);
     };
+
     fetchCarte();
-  }, [dispatch]);
+  }, [dispatch, filters]);
 
   const handleToggleFavorite = async (id: number) => {
     const isFav = favorites.includes(id);
     const method = isFav ? "DELETE" : "POST";
-    const url = `http://localhost:8080/api/carte/${id}/preferita`;
     try {
-      const resp = await fetch(url, { method });
+      const resp = await fetch(
+        `http://localhost:8080/api/carte/${id}/preferita`,
+        { method }
+      );
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       dispatch(toggleFavorite(id));
     } catch (e) {
@@ -55,7 +91,7 @@ export default function CardList() {
 
   if (loading) {
     return (
-      <div className=" flex items-center justify-center">
+      <div className="flex items-center justify-center">
         <LoadingSpinner />
       </div>
     );

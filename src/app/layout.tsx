@@ -17,11 +17,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="it">
-      <body>
+      <body className="flex flex-col min-h-screen">
         <Providers>
           <Header />
           <FilterWrapper />
-          {children}
+          <main className="flex-grow bg-white">{children}</main>
           <Footer />
         </Providers>
       </body>

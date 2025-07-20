@@ -25,19 +25,30 @@ export default function LogInForm({ onClose }: LogInFormProps) {
       const resp = await fetch("http://localhost:8080/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+        body: JSON.stringify({ email, password }),
       });
-
       if (!resp.ok) {
         const err = await resp.json();
         throw new Error(err.message || `Errore ${resp.status}`);
       }
-
       const token = await resp.text();
-      dispatch(logIn({ username: email, token }));
+
+      const profileResp = await fetch("http://localhost:8080/utente", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!profileResp.ok) {
+        throw new Error("Impossibile recuperare il profilo utente");
+      }
+      const user = await profileResp.json();
+
+      dispatch(
+        logIn({
+          username: user.userName,
+          token,
+          role: user.ruolo as "USER" | "ADMIN",
+        })
+      );
+
       onClose();
     } catch (e: any) {
       console.error("Login fallito:", e);
