@@ -7,7 +7,6 @@ export interface Carta {
   urlImmagine: string;
   prezzo: number;
   rarita: string;
-  inCollezione: boolean;
 }
 
 interface CartaState {
@@ -35,8 +34,11 @@ const cartaSlice = createSlice({
         state.favorites.push(id);
       }
     },
+    setFavorites(state, action: PayloadAction<number[]>) {
+      state.favorites = action.payload;
+    },
   },
 });
 
-export const { setCarte, toggleFavorite } = cartaSlice.actions;
+export const { setCarte, toggleFavorite, setFavorites} = cartaSlice.actions;
 export default cartaSlice.reducer;

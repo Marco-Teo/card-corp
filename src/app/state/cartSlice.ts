@@ -13,12 +13,15 @@ interface CartState {
   id: number | null;
   userId: number | null;
   items: CartItem[];
+  favorites: number[];
+
 }
 
 const initialState: CartState = {
   id: null,
   userId: null,
   items: [],
+  favorites: [],
 };
 
 const cartSlice = createSlice({
@@ -52,6 +55,17 @@ const cartSlice = createSlice({
     },
     clearCart: state => {
       state.items = [];
+    },
+    setFavorites(state, action: PayloadAction<number[]>) {
+      state.favorites = action.payload;
+    },
+    toggleFavorite(state, action: PayloadAction<number>) {
+      const id = action.payload;
+      if (state.favorites.includes(id)) {
+        state.favorites = state.favorites.filter((f) => f !== id);
+      } else {
+        state.favorites.push(id);
+      }
     },
   },
 });

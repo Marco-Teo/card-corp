@@ -5,6 +5,7 @@ interface LogInState {
   username: string;
   token: string;
   role: string;
+  userId: number | null;
 }
 
 const readFromStorage = (key: string): string =>
@@ -15,6 +16,7 @@ const initialState: LogInState = {
   username: readFromStorage("username"),
   token: readFromStorage("token"),
   role: readFromStorage("role"),
+  userId: parseInt(readFromStorage("userId")) || null,
 };
 
 const logInSlice = createSlice({
@@ -23,15 +25,18 @@ const logInSlice = createSlice({
   reducers: {
     logIn: (
       state,
-      action: PayloadAction<{ username: string; token: string; role: string }>
+      action: PayloadAction<{ username: string; token: string; role: string, userId: number | null }>,
     ) => {
-      state.isLoggedIn = false;
+      state.isLoggedIn = true;
       state.username = action.payload.username;
       state.token = action.payload.token;
       state.role = action.payload.role;
+      state.userId = action.payload.userId || null;
+      
       if (typeof window !== "undefined") {
         localStorage.setItem("username", action.payload.username);
         localStorage.setItem("token", action.payload.token);
+        localStorage.setItem("userId", action.payload.userId!.toString());
       }
     },
     logOut: (state) => {
@@ -41,6 +46,7 @@ const logInSlice = createSlice({
       if (typeof window !== "undefined") {
         localStorage.removeItem("username");
         localStorage.removeItem("token");
+        localStorage.removeItem("userId");
       }
     },
   },

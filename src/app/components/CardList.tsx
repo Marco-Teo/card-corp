@@ -15,14 +15,15 @@ export default function CardList() {
   const carte = useSelector((state: RootState) => state.carta.carte);
   const favorites = useSelector((state: RootState) => state.carta.favorites);
   const filters = useSelector((state: RootState) => state.filters);
+  const userId = useSelector((state: RootState) => state.logIn.userId);
 
   const bgByRarita: Record<string, string> = {
     COMMON: "bg-gray-700",
     UNCOMMON: "bg-green-700",
-    SUPER_RARE: "bg-blue-700",
+    SUPER_RARE: "bg-orange-200",
     SECRET_RARE: "bg-purple-700",
     GOD_RARE: "bg-yellow-300",
-    ALTERNATE: "bg-pink-200",
+    ALTERNATE: "bg-black",
     LEADER: "bg-red-700",
   };
 
@@ -63,7 +64,7 @@ export default function CardList() {
         return;
       }
 
-      const data: Carta[] = await resp.json();
+      const data = (await resp.json()) as Carta[];
       dispatch(setCarte(data));
       setLoading(false);
     };
@@ -71,18 +72,21 @@ export default function CardList() {
     fetchCarte();
   }, [dispatch, filters]);
 
-  const handleToggleFavorite = async (id: number) => {
-    const isFav = favorites.includes(id);
-    const method = isFav ? "DELETE" : "POST";
+  const handleAddFavorite = async (cartaId: number) => {
+    if (!userId) {
+      console.error("Devi essere loggato per aggiungere ai preferiti");
+      return;
+    }
+
     try {
       const resp = await fetch(
-        `http://localhost:8080/api/carte/${id}/preferita`,
-        { method }
+        `http://localhost:8080/users/${userId}/favorites/${cartaId}`,
+        { method: "POST" }
       );
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      dispatch(toggleFavorite(id));
+      dispatch(toggleFavorite(cartaId));
     } catch (e) {
-      console.error("Impossibile aggiornare i preferiti:", e);
+      console.error("Impossibile aggiungere ai preferiti:", e);
     }
   };
 
@@ -98,7 +102,7 @@ export default function CardList() {
   }
 
   return (
-    <div className="container mx-auto py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className="container mx-auto px-4 py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {carte.map((c) => {
         const isFav = favorites.includes(c.id);
         const bgColor = bgByRarita[c.rarita] || "bg-blue-700";
@@ -107,7 +111,7 @@ export default function CardList() {
           <div key={c.id} className={`${bgColor} p-4 rounded-lg shadow-md`}>
             <div className="relative flex justify-center p-4 bg-white rounded-t-lg shadow-sm">
               <button
-                onClick={() => handleToggleFavorite(c.id)}
+                onClick={() => handleAddFavorite(c.id)}
                 className="absolute top-2 right-2"
               >
                 {isFav ? (

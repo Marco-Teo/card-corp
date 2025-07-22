@@ -1,5 +1,4 @@
 import { configureStore } from '@reduxjs/toolkit';
-import userReducer from './userSlice';
 import menuReducer from './menuSlice';
 import cartaReducer from './cartaSlice';
 import logInReducer from './logInSlice';
@@ -8,7 +7,6 @@ import filterReducer from './filterSlice';
 
 export const store = configureStore({
   reducer: {
-    user: userReducer,
     menu: menuReducer,
     carta: cartaReducer,
     logIn: logInReducer,

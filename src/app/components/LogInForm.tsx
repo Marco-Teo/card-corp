@@ -3,7 +3,7 @@
 import { useState, FormEvent } from "react";
 import { useDispatch } from "react-redux";
 import { logIn } from "../state/logInSlice";
-import { AppDispatch } from "../state/store";
+import type { AppDispatch } from "../state/store";
 import { useRouter } from "next/navigation";
 
 interface LogInFormProps {
@@ -12,10 +12,11 @@ interface LogInFormProps {
 
 export default function LogInForm({ onClose }: LogInFormProps) {
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -31,7 +32,9 @@ export default function LogInForm({ onClose }: LogInFormProps) {
         const err = await resp.json();
         throw new Error(err.message || `Errore ${resp.status}`);
       }
+
       const token = await resp.text();
+      localStorage.setItem("authToken", token);
 
       const profileResp = await fetch("http://localhost:8080/utente", {
         headers: { Authorization: `Bearer ${token}` },
@@ -46,10 +49,12 @@ export default function LogInForm({ onClose }: LogInFormProps) {
           username: user.userName,
           token,
           role: user.ruolo as "USER" | "ADMIN",
+          userId: user.id,
         })
       );
 
       onClose();
+      router.push("/");
     } catch (e: any) {
       console.error("Login fallito:", e);
       setError(e.message || "Login fallito, riprova.");

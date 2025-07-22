@@ -8,12 +8,10 @@ import {
   FiMessageSquare,
   FiSettings,
   FiEdit,
-  FiInfo,
   FiHeart,
-  FiBox,
   FiLogOut,
 } from "react-icons/fi";
-import Link from "next/link";
+import { FaClipboardList } from "react-icons/fa";
 
 interface Props {
   onClose: () => void;
@@ -54,29 +52,20 @@ export default function LogInDropdown({ onClose }: Props) {
         <FiEdit className="mr-2 text-blue-600" /> Edit profile
       </a>
       <a
-        href="#"
+        href="/ordini"
         onClick={handleClick}
         className="flex items-center px-3 py-2 hover:bg-gray-100 text-black"
       >
-        <FiInfo className="mr-2 text-blue-600" /> Informazioni
+        <FaClipboardList className="mr-2 text-blue-600" /> Ordini
       </a>
 
-      <Link
+      <a
         href="/preferiti"
-        prefetch={false}
         onClick={handleClick}
         className="flex items-center px-3 py-2 hover:bg-gray-100 text-black"
       >
         <FiHeart className="mr-2 text-blue-600" /> Preferiti
-      </Link>
-
-      <Link
-        href="/collezione"
-        onClick={handleClick}
-        className="flex items-center px-3 py-2 hover:bg-gray-100 text-black"
-      >
-        <FiBox className="mr-2 text-blue-600" /> Collezione
-      </Link>
+      </a>
 
       <a
         href="#"

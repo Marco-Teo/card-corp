@@ -6,6 +6,7 @@ import { AppDispatch, RootState } from "../state/store";
 import {
   setCarte,
   toggleFavorite,
+  setFavorites,
   type Carta as CartaType,
 } from "../state/cartaSlice";
 import { addItem } from "../state/cartSlice";
@@ -15,44 +16,47 @@ import { LiaCartPlusSolid } from "react-icons/lia";
 
 export default function Preferiti() {
   const dispatch = useDispatch<AppDispatch>();
+  const userId = useSelector((s: RootState) => s.logIn.userId);
   const cartePreferite = useSelector(
     (s: RootState) => s.carta.carte as CartaType[]
   );
-  const favorites = useSelector((s: RootState) => s.carta.favorites);
+
+  const favorites = useSelector((state: RootState) => state.carta.favorites);
 
   useEffect(() => {
-    const fetchPreferite = async () => {
+    if (!userId) return;
+    (async () => {
       try {
-        const resp = await fetch("http://localhost:8080/api/carte/preferite");
+        const resp = await fetch(
+          `http://localhost:8080/users/${userId}/favorites`
+        );
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const data: CartaType[] = await resp.json();
         dispatch(setCarte(data));
-        data.forEach((c) => dispatch(toggleFavorite(c.id)));
+        dispatch(setFavorites(data.map((c) => c.id)));
       } catch (e) {
         console.error("Errore fetch preferiti:", e);
       }
-    };
-    fetchPreferite();
-  }, [dispatch]);
+    })();
+  }, [dispatch, userId]);
 
-  const handleToggleFavorite = async (id: number) => {
-    const isFav = favorites.includes(id);
-    const method = isFav ? "DELETE" : "POST";
+  const handleRemoveFavorite = async (cartaId: number) => {
+    if (!userId) return;
     try {
       const resp = await fetch(
-        `http://localhost:8080/api/carte/${id}/preferita`,
-        { method }
+        `http://localhost:8080/users/${userId}/favorites/${cartaId}`,
+        { method: "DELETE" }
       );
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      dispatch(toggleFavorite(id));
+      dispatch(toggleFavorite(cartaId));
+      dispatch(setCarte(cartePreferite.filter((c) => c.id !== cartaId)));
     } catch (e) {
-      console.error("Impossibile aggiornare preferito:", e);
+      console.error("Impossibile rimuovere dai preferiti:", e);
     }
   };
 
-  const handleAddToCart = (c: CartaType) => {
+  const handleAddToCart = (c: CartaType) =>
     dispatch(addItem({ ...c, quantita: 1 }));
-  };
 
   const bgByRarita: Record<string, string> = {
     COMMON: "bg-gray-700",
@@ -90,16 +94,16 @@ export default function Preferiti() {
                 >
                   <div className="relative flex justify-center p-4 bg-white rounded-t-lg shadow-sm">
                     <button
-                      onClick={() => handleToggleFavorite(carta.id)}
+                      onClick={() => handleRemoveFavorite(carta.id)}
                       className="absolute top-2 right-2"
                     >
                       {isFav ? (
-                        <CiHeart
+                        <FaHeart
                           size={24}
                           className="text-blue-700 cursor-pointer"
                         />
                       ) : (
-                        <FaHeart
+                        <CiHeart
                           size={24}
                           className="text-blue-700 cursor-pointer"
                         />
