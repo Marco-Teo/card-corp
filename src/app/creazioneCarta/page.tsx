@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, FormEvent } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../state/store";
 
 export default function CreazioneCartaPage() {
   const [nome, setNome] = useState("");
@@ -11,6 +13,7 @@ export default function CreazioneCartaPage() {
   const [rarita, setRarita] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const token = useSelector((state: RootState) => state.logIn.token);
 
   useEffect(() => {
     fetch("http://localhost:8080/api/carte/rarities")
@@ -43,7 +46,10 @@ export default function CreazioneCartaPage() {
       };
       const resp = await fetch("http://localhost:8080/api/carte", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(payload),
       });
       if (!resp.ok) {

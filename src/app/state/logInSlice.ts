@@ -37,6 +37,7 @@ const logInSlice = createSlice({
         localStorage.setItem("username", action.payload.username);
         localStorage.setItem("token", action.payload.token);
         localStorage.setItem("userId", action.payload.userId!.toString());
+        localStorage.setItem("role", action.payload.role);
       }
     },
     logOut: (state) => {

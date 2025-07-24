@@ -68,7 +68,7 @@ export default function LogInDropdown({ onClose }: Props) {
       </a>
 
       <a
-        href="#"
+        href="/"
         onClick={() => {
           dispatch(logOut());
           dispatch(toggleMenu());

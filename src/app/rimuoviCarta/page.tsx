@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../state/store";
 
 interface Carta {
   id: number;
@@ -17,18 +19,24 @@ export default function RimuoviCartaPage() {
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState<"search" | "confirm" | "done">("search");
   const [success, setSuccess] = useState<string | null>(null);
+  const token = useSelector((s: RootState) => s.logIn.token);
 
   const loadCarta = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
     setCarta(null);
-    setSuccess(null);
+    if (!token) {
+      setError("Devi essere autenticato per cercare una carta.");
+      return;
+    }
     if (!/^\d+$/.test(idInput.trim())) {
       setError("Inserisci un ID numerico valido.");
       return;
     }
     try {
-      const res = await fetch(`http://localhost:8080/api/carte/${idInput}`);
+      const res = await fetch(`http://localhost:8080/api/carte/${idInput}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (res.status === 404) {
         setError(`Carta con ID ${idInput} non trovata.`);
         return;
@@ -44,11 +52,16 @@ export default function RimuoviCartaPage() {
   };
 
   const deleteCarta = async () => {
+    if (!token) {
+      setError("Devi essere autenticato per eliminare una carta.");
+      return;
+    }
     if (!carta) return;
     setError(null);
     try {
       const res = await fetch(`http://localhost:8080/api/carte/${carta.id}`, {
         method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error(`Errore ${res.status}`);
       setSuccess(`Carta "${carta.nome}" eliminata con successo.`);

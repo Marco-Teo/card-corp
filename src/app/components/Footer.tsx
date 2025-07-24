@@ -35,7 +35,7 @@ const navigation = {
 export default function Footer() {
   return (
     <footer className="bg-white ">
-      <div className=" container mx-auto py-8 sm:py-12 lg:py-16">
+      <div className=" container mx-auto flex items-center px-6 py-3">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <div>
             <img alt="Company name" src="/MARCO.svg" className="h-10 w-10" />

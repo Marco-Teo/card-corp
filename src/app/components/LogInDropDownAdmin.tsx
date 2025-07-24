@@ -1,4 +1,3 @@
-// components/LogInDropDownAdmin.tsx
 "use client";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -7,6 +6,7 @@ import { toggleMenu } from "../state/menuSlice";
 import { FiLogOut, FiPlusCircle, FiTrash2 } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import { logOut } from "../state/logInSlice";
+import Link from "next/link";
 
 interface Props {
   onClose: () => void;
@@ -36,21 +36,23 @@ export default function LogInDropDownAdmin({ onClose }: Props) {
 
   return (
     <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-10">
-      <button
+      <Link
+        href="/creazioneCarta"
         onClick={handleAddCard}
         className="flex items-center w-full px-3 py-2 hover:bg-gray-100 text-black"
       >
         <FiPlusCircle className="mr-2 text-green-600" /> Aggiungi Carta
-      </button>
-      <button
+      </Link>
+      <Link
+        href="/rimuoviCarta"
         onClick={handleRemoveCard}
         className="flex items-center w-full px-3 py-2 hover:bg-gray-100 text-black"
       >
         <FiTrash2 className="mr-2 text-red-600" /> Rimuovi Carta
-      </button>
+      </Link>
 
       <a
-        href="#"
+        href="/"
         onClick={() => {
           dispatch(logOut());
           dispatch(toggleMenu());
