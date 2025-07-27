@@ -77,7 +77,7 @@ export default function RegisterForm() {
                   required
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
-                  className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white"
+                  className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white-opacity-50"
                   placeholder="GokuFan"
                 />
               </div>
@@ -99,7 +99,7 @@ export default function RegisterForm() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white"
+                className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white-opacity-50"
                 placeholder="Password"
               />
             </div>
@@ -117,7 +117,7 @@ export default function RegisterForm() {
                 required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white"
+                className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white-opacity-50"
                 placeholder="Password"
               />
             </div>
@@ -147,7 +147,7 @@ export default function RegisterForm() {
                   required
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white"
+                  className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white-opacity-50"
                   placeholder="Mario "
                 />
               </div>
@@ -167,7 +167,7 @@ export default function RegisterForm() {
                   required
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
-                  className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white"
+                  className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white-opacity-50"
                   placeholder="Rossi"
                 />
               </div>
@@ -187,7 +187,7 @@ export default function RegisterForm() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white"
+                  className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white-opacity-50"
                   placeholder="mario.rossi@qualcosa.com"
                 />
               </div>
@@ -207,7 +207,7 @@ export default function RegisterForm() {
                   required
                   value={indirizzo}
                   onChange={(e) => setIndirizzo(e.target.value)}
-                  className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white"
+                  className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white-opacity-50"
                   placeholder="Via Vattelapesca n° 5"
                 />
               </div>

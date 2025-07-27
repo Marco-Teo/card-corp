@@ -101,9 +101,7 @@ export default function FiltersBar() {
             </div>
 
             <div className="flex flex-col w-full lg:w-auto">
-              <label className="block text-sm font-medium text-blue-700 mb-2">
-                Range prezzo
-              </label>
+              <label className="block text-sm font-medium text-blue-700 mb-2"></label>
               <div className="flex flex-col md:flex-row gap-4">
                 <FormImputField
                   label="Minimo"
