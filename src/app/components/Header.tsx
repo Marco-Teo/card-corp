@@ -27,25 +27,29 @@ export default function Header() {
     }
   };
   return (
-    <header className="bg-white border-b shadow-sm">
-      <div className="container mx-auto flex items-center px-6 py-3">
-        <Link href="/">
-          <img src="/MARCO1.svg" alt="logo" className="w-20 h-20" />
+    <header className="relative z-20 w-full overflow-hidden border-b border-blue-100 bg-white/95 shadow-sm backdrop-blur">
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-wrap items-center gap-3 px-4 py-3 sm:flex-nowrap sm:px-6">
+        <Link href="/" className="flex shrink-0 items-center">
+          <img
+            src="/MARCO1.svg"
+            alt="CardCorp"
+            className="h-14 w-14 sm:h-16 sm:w-16"
+          />
         </Link>
 
-        <div className="flex-grow mx-12 relative">
+        <div className="relative order-3 w-full sm:order-2 sm:flex-1">
           <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-white" />
           <input
             type="text"
             placeholder="cerca"
-            className="w-full bg-blue-700 border border-blue-700 text-center text-white py-2 pl-12 pr-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-700"
+            className="h-11 w-full rounded-full border border-blue-700 bg-blue-700 py-2 pl-12 pr-4 text-center text-white placeholder:text-blue-100 focus:outline-none focus:ring-2 focus:ring-yellow-300"
           />
         </div>
 
-        <div className="flex items-center space-x-8 ml-12 flex-shrink-0">
+        <div className="order-2 ml-auto flex shrink-0 items-center gap-3 sm:order-3 sm:ml-0 sm:gap-5">
           <button
             onClick={() => setShowCart(true)}
-            className="text-blue-700 hover:text-blue-800"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-blue-100 text-blue-700 hover:bg-blue-50 hover:text-blue-800"
             aria-label="Apri carrello"
           >
             <FiShoppingCart size={24} />
@@ -53,7 +57,7 @@ export default function Header() {
           <div className="relative">
             <button
               onClick={handleProfileClick}
-              className="bg-blue-700 p-2 rounded-full text-white hover:bg-blue-600"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-blue-700 text-white hover:bg-blue-600"
               aria-label="Apri menu utente"
             >
               <FiUser size={20} />
@@ -66,11 +70,11 @@ export default function Header() {
 
             {showLogin && (
               <div
-                className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
                 onClick={() => setShowLogin(false)}
               >
                 <div
-                  className="bg-white p-6 rounded-md shadow-lg"
+                  className="w-full max-w-md rounded-lg bg-white p-5 shadow-lg"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <LogInForm onClose={() => setShowLogin(false)} />
@@ -83,11 +87,11 @@ export default function Header() {
 
       {showCart && (
         <div
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           onClick={() => setShowCart(false)}
         >
           <div
-            className="bg-white w-full max-w-lg p-6 rounded-md shadow-lg no-scrollbar overflow-y-auto"
+            className="no-scrollbar max-h-[88vh] w-full max-w-lg overflow-y-auto rounded-lg bg-white p-3 shadow-lg sm:p-5"
             onClick={(e) => e.stopPropagation()}
           >
             <Cart />

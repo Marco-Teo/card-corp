@@ -5,15 +5,6 @@ import FilterBar from "./FilterBar";
 
 export default function FilterWrapper() {
   const pathname = usePathname();
-  if (
-    pathname === "/registrazione" ||
-    pathname.startsWith("/registrazione/") ||
-    pathname === "/creazioneCarta " ||
-    pathname.startsWith("/creazioneCarta/") ||
-    pathname === "/rimuoviCarta" ||
-    pathname.startsWith("/rimuoviCarta/")
-  ) {
-    return null;
-  }
+  if (pathname !== "/") return null;
   return <FilterBar />;
 }

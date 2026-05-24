@@ -12,6 +12,7 @@ import {
   FiLogOut,
 } from "react-icons/fi";
 import { FaClipboardList } from "react-icons/fa";
+import Link from "next/link";
 
 interface Props {
   onClose: () => void;
@@ -29,32 +30,32 @@ export default function LogInDropdown({ onClose }: Props) {
   };
 
   return (
-    <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-lg z-10">
+    <div className="absolute right-0 z-30 mt-2 w-48 overflow-hidden rounded-lg border border-blue-100 bg-white shadow-lg">
       <a
         href="#"
         onClick={handleClick}
-        className="flex items-center px-3 py-2 hover:bg-gray-100 text-black"
+        className="flex min-h-11 items-center px-3 py-2 text-black hover:bg-blue-50"
       >
         <FiMessageSquare className="mr-2 text-blue-600" /> Messaggi
       </a>
       <a
         href="#"
         onClick={handleClick}
-        className="flex items-center px-3 py-2 hover:bg-gray-100 text-black"
+        className="flex min-h-11 items-center px-3 py-2 text-black hover:bg-blue-50"
       >
         <FiSettings className="mr-2 text-blue-600" /> Impostazioni
       </a>
       <a
         href="#"
         onClick={handleClick}
-        className="flex items-center px-3 py-2 hover:bg-gray-100 text-black"
+        className="flex min-h-11 items-center px-3 py-2 text-black hover:bg-blue-50"
       >
         <FiEdit className="mr-2 text-blue-600" /> Edit profile
       </a>
       <a
         href="/ordini"
         onClick={handleClick}
-        className="flex items-center px-3 py-2 hover:bg-gray-100 text-black"
+        className="flex min-h-11 items-center px-3 py-2 text-black hover:bg-blue-50"
       >
         <FaClipboardList className="mr-2 text-blue-600" /> Ordini
       </a>
@@ -62,22 +63,22 @@ export default function LogInDropdown({ onClose }: Props) {
       <a
         href="/preferiti"
         onClick={handleClick}
-        className="flex items-center px-3 py-2 hover:bg-gray-100 text-black"
+        className="flex min-h-11 items-center px-3 py-2 text-black hover:bg-blue-50"
       >
         <FiHeart className="mr-2 text-blue-600" /> Preferiti
       </a>
 
-      <a
+      <Link
         href="/"
         onClick={() => {
           dispatch(logOut());
           dispatch(toggleMenu());
         }}
-        className="flex items-center px-3 py-2 hover:bg-gray-100 text-black"
+        className="flex min-h-11 items-center px-3 py-2 text-black hover:bg-blue-50"
       >
         <FiLogOut className="mr-2 text-blue-600" />
         Log out
-      </a>
+      </Link>
     </div>
   );
 }

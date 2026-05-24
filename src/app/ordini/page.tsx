@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { apiUrl } from "../lib/api";
 
 interface Ordine {
   id: number;
   dataOrdine: string;
   indirizzo: string;
-  carteOrdinate: any[];
+  carteOrdinate: unknown[];
 }
 
 export default function OrdiniPage() {
@@ -27,7 +28,7 @@ export default function OrdiniPage() {
 
     (async () => {
       try {
-        const prof = await fetch("http://localhost:8080/utente", {
+        const prof = await fetch(apiUrl("/utente"), {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!prof.ok) throw new Error("Impossibile recuperare profilo");
@@ -35,14 +36,14 @@ export default function OrdiniPage() {
         console.log("👤 utente:", user);
 
         const resp = await fetch(
-          `http://localhost:8080/ordini/user/${user.id}`,
+          apiUrl(`/ordini/user/${user.id}`),
           { headers: { Authorization: `Bearer ${token}` } }
         );
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const data: Ordine[] = await resp.json();
         setOrdini(data);
-      } catch (e: any) {
-        setError(e.message);
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "Errore caricamento ordini");
       } finally {
         setLoading(false);
       }
@@ -51,21 +52,29 @@ export default function OrdiniPage() {
 
   if (loading)
     return (
-      <div className="flex items-center justify-center p-8">
+      <div className="content-panel flex min-h-60 items-center justify-center p-8">
         <LoadingSpinner />
       </div>
     );
   if (error)
-    return <div className="p-8 text-center text-red-600">Errore: {error}</div>;
+    return (
+      <div className="content-panel p-8 text-center text-red-600">
+        Errore: {error}
+      </div>
+    );
   if (ordini.length === 0)
-    return <div className="p-8 text-center">Nessun ordine trovato.</div>;
+    return (
+      <div className="content-panel p-8 text-center text-black">
+        Nessun ordine trovato.
+      </div>
+    );
 
   return (
-    <main className="container lg:mx-auto lg:py-8 container mx-auto px-4 py-4 sm:grid-cols-2 md:grid-cols-3">
-      <h1 className="mb-6 text-2xl font-bold text-black ">I tuoi ordini</h1>
+    <section className="content-panel p-4 sm:p-6">
+      <h1 className="mb-6 text-2xl font-bold text-black">I tuoi ordini</h1>
       <ul className="space-y-4">
         {ordini.map((o) => (
-          <li key={o.id} className="border rounded-lg p-4">
+          <li key={o.id} className="rounded-lg border border-blue-100 bg-white p-4">
             <p className="font-semibold text-blue-700">Ordine #{o.id}</p>
             <p className="text-sm text-gray-600">
               {new Date(o.dataOrdine).toLocaleDateString()}
@@ -77,6 +86,6 @@ export default function OrdiniPage() {
           </li>
         ))}
       </ul>
-    </main>
+    </section>
   );
 }

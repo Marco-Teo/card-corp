@@ -6,6 +6,7 @@ import type { AppDispatch, RootState } from "../state/store";
 import CartCard from "./CartCard";
 import { clearCart } from "../state/cartSlice";
 import { useEffect, useState } from "react";
+import { apiUrl } from "../lib/api";
 
 export default function Cart() {
   const cartItems = useSelector((state: RootState) => state.cart.items);
@@ -45,7 +46,7 @@ export default function Cart() {
     setError(null);
 
     try {
-      const profResp = await fetch("http://localhost:8080/utente", {
+      const profResp = await fetch(apiUrl("/utente"), {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!profResp.ok) throw new Error("Impossibile recuperare profilo");
@@ -64,7 +65,7 @@ export default function Cart() {
         })),
       };
 
-      const ordineResp = await fetch("http://localhost:8080/ordini", {
+      const ordineResp = await fetch(apiUrl("/ordini"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -79,9 +80,9 @@ export default function Cart() {
 
       dispatch(clearCart());
       alert("Ordine effettuato con successo!");
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error("Checkout fallito:", e);
-      setError(e.message || "Errore durante il checkout");
+      setError(e instanceof Error ? e.message : "Errore durante il checkout");
     } finally {
       setLoading(false);
     }
@@ -94,13 +95,13 @@ export default function Cart() {
   return (
     <div
       className="
-        bg-white p-6 rounded-md shadow-lg
+        rounded-lg bg-white p-4 shadow-lg sm:p-5
         w-full max-w-md mx-auto
         flex flex-col
-        max-h-[80vh]
+        max-h-[82vh]
       "
     >
-      <div className="flex-1 overflow-y-auto flex flex-col gap-4 mb-6">
+      <div className="mb-5 flex flex-1 flex-col gap-1 overflow-y-auto">
         {cartItems.length === 0 ? (
           <p className="text-center text-gray-500 mt-10">Il carrello è vuoto</p>
         ) : (
@@ -112,8 +113,8 @@ export default function Cart() {
         <p className="text-red-600 text-center text-sm mb-2">{error}</p>
       )}
 
-      <div className="border-t pt-4 space-y-4">
-        <div className="flex items-center justify-between">
+      <div className="space-y-4 border-t pt-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2">
             <div className="relative">
               <FiShoppingCart className="text-blue-700" size={24} />
@@ -134,7 +135,7 @@ export default function Cart() {
             <h4 className="font-medium text-black">Totale: € {summ}</h4>
           </div>
           <button
-            className="rounded-full bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-500"
+            className="min-h-11 rounded-full bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-500 disabled:opacity-60"
             onClick={resetCart}
             disabled={loading}
           >
@@ -145,7 +146,7 @@ export default function Cart() {
           <button
             onClick={handleCheckout}
             disabled={loading || cartItems.length === 0}
-            className={`rounded-full px-6 py-2.5 text-sm font-semibold text-white ${
+            className={`min-h-11 w-full rounded-full px-6 py-2.5 text-sm font-semibold text-white sm:w-auto ${
               loading || cartItems.length === 0
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-blue-700 hover:bg-blue-600"

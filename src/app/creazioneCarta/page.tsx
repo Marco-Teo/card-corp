@@ -3,6 +3,7 @@
 import { useState, useEffect, FormEvent } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../state/store";
+import { apiUrl } from "../lib/api";
 
 export default function CreazioneCartaPage() {
   const [nome, setNome] = useState("");
@@ -16,7 +17,7 @@ export default function CreazioneCartaPage() {
   const token = useSelector((state: RootState) => state.logIn.token);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/carte/rarities")
+    fetch(apiUrl("/api/carte/rarities"))
       .then((res) => {
         if (!res.ok) throw new Error("Impossibile recuperare le rarità");
         return res.json();
@@ -44,7 +45,7 @@ export default function CreazioneCartaPage() {
         prezzo: parseFloat(prezzo),
         rarita,
       };
-      const resp = await fetch("http://localhost:8080/api/carte", {
+      const resp = await fetch(apiUrl("/api/carte"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -67,16 +68,16 @@ export default function CreazioneCartaPage() {
 
       setSuccess("Carta aggiunta!");
       setTimeout(() => setSuccess(null), 3000);
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error(e);
-      setError(e.message);
+      setError(e instanceof Error ? e.message : "Errore durante il salvataggio");
     }
   };
 
   return (
-    <div className="bg-white p-4">
-      <div className="container mx-auto">
-        <div className="max-w-xl mx-auto p-6 rounded shadow text-black">
+    <div className="content-panel p-4 sm:p-6">
+      <div className="mx-auto max-w-xl">
+        <div className="text-black">
           <h1 className="text-2xl font-bold mb-4">Aggiungi Carta</h1>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -84,7 +85,7 @@ export default function CreazioneCartaPage() {
               <input
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
-                className="w-full border rounded px-2 py-1"
+                className="mt-2 min-h-11 w-full rounded-full border border-blue-100 px-4 py-2"
                 required
               />
             </div>
@@ -94,7 +95,7 @@ export default function CreazioneCartaPage() {
               <textarea
                 value={descrizione}
                 onChange={(e) => setDescrizione(e.target.value)}
-                className="w-full border rounded px-2 py-1"
+                className="mt-2 min-h-28 w-full rounded-lg border border-blue-100 px-4 py-2"
                 required
               />
             </div>
@@ -105,7 +106,7 @@ export default function CreazioneCartaPage() {
                 type="url"
                 value={urlImmagine}
                 onChange={(e) => setUrlImmagine(e.target.value)}
-                className="w-full border rounded px-2 py-1"
+                className="mt-2 min-h-11 w-full rounded-full border border-blue-100 px-4 py-2"
                 required
               />
             </div>
@@ -117,7 +118,7 @@ export default function CreazioneCartaPage() {
                 step="0.01"
                 value={prezzo}
                 onChange={(e) => setPrezzo(e.target.value)}
-                className="w-full border rounded px-2 py-1"
+                className="mt-2 min-h-11 w-full rounded-full border border-blue-100 px-4 py-2"
                 required
               />
             </div>
@@ -127,7 +128,7 @@ export default function CreazioneCartaPage() {
               <select
                 value={rarita}
                 onChange={(e) => setRarita(e.target.value)}
-                className="w-full border rounded px-2 py-1"
+                className="mt-2 min-h-11 w-full rounded-full border border-blue-100 px-4 py-2"
                 required
               >
                 {raritaOptions.map((r) => (
@@ -141,7 +142,7 @@ export default function CreazioneCartaPage() {
             {error && <p className="text-red-600">{error}</p>}
             {success && <p className="text-green-600">{success}</p>}
 
-            <div className="flex justify-end gap-2">
+            <div className="flex flex-col justify-end gap-2 sm:flex-row">
               <button
                 type="reset"
                 onClick={() => {
@@ -153,13 +154,13 @@ export default function CreazioneCartaPage() {
                   setError(null);
                   setSuccess(null);
                 }}
-                className="px-4 py-2 border rounded"
+                className="min-h-11 rounded-full border border-blue-100 px-4 py-2"
               >
                 Annulla
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-indigo-600 text-white rounded"
+                className="min-h-11 rounded-full bg-blue-700 px-5 py-2 text-white hover:bg-blue-600"
               >
                 Aggiungi
               </button>

@@ -70,14 +70,14 @@ export default function FiltersBar() {
   };
 
   return (
-    <div className="bg-white p-4">
-      <div className="container mx-auto">
+    <section className="relative z-10 mx-auto w-full max-w-[960px] px-4 pt-4 sm:px-6">
+      <div className="content-panel p-4">
         <form
           onSubmit={handleSearch}
-          className="flex flex-col lg:flex-row items-start lg:items-center justify-start gap-4"
+          className="flex flex-col gap-4"
         >
-          <div className="flex flex-col lg:flex-row items-end gap-4 w-full justify-between">
-            <div className="flex flex-col w-full lg:w-auto">
+          <div className="grid w-full grid-cols-1 items-end gap-4 md:grid-cols-2 lg:grid-cols-[1fr_1fr_2fr_1fr_auto]">
+            <div className="flex min-w-0 flex-col">
               <FormImputField
                 label="Nome"
                 placeholder="Nome"
@@ -90,7 +90,7 @@ export default function FiltersBar() {
               />
             </div>
 
-            <div className="flex flex-col w-full lg:w-auto">
+            <div className="flex min-w-0 flex-col">
               <DropDownMenu
                 label="Rarità"
                 name="rarita"
@@ -100,9 +100,9 @@ export default function FiltersBar() {
               />
             </div>
 
-            <div className="flex flex-col w-full lg:w-auto">
+            <div className="flex min-w-0 flex-col">
               <label className="block text-sm font-medium text-blue-700 mb-2"></label>
-              <div className="flex flex-col md:flex-row gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <FormImputField
                   label="Minimo"
                   placeholder="Min"
@@ -126,7 +126,7 @@ export default function FiltersBar() {
               </div>
             </div>
 
-            <div className="flex flex-col w-full lg:w-auto">
+            <div className="flex min-w-0 flex-col">
               <DropDownMenu
                 label="Ordina per"
                 name="ordine"
@@ -139,17 +139,17 @@ export default function FiltersBar() {
               />
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex w-full gap-2 md:col-span-2 lg:col-span-1 lg:w-auto">
               <button
                 type="submit"
-                className="rounded-full bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-blue-100 hover:text-black"
+                className="min-h-11 flex-1 rounded-full bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white shadow-xs ring-1 ring-blue-700 ring-inset hover:bg-blue-800 lg:flex-none"
               >
                 Cerca
               </button>
               <button
                 type="button"
                 onClick={handleReset}
-                className="rounded-full bg-red-700 px-4 py-2.5 text-sm font-semibold text-white shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-white hover:text-black"
+                className="min-h-11 flex-1 rounded-full bg-red-700 px-4 py-2.5 text-sm font-semibold text-white shadow-xs ring-1 ring-red-700 ring-inset hover:bg-red-800 lg:flex-none"
               >
                 Reset
               </button>
@@ -157,6 +157,6 @@ export default function FiltersBar() {
           </div>
         </form>
       </div>
-    </div>
+    </section>
   );
 }

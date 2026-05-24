@@ -3,6 +3,7 @@
 import { useState, FormEvent } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../state/store";
+import { apiUrl } from "../lib/api";
 
 interface Carta {
   id: number;
@@ -34,7 +35,7 @@ export default function RimuoviCartaPage() {
       return;
     }
     try {
-      const res = await fetch(`http://localhost:8080/api/carte/${idInput}`, {
+      const res = await fetch(apiUrl(`/api/carte/${idInput}`), {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.status === 404) {
@@ -45,9 +46,11 @@ export default function RimuoviCartaPage() {
       const data: Carta = await res.json();
       setCarta(data);
       setStep("confirm");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(err.message || "Errore durante il caricamento.");
+      setError(
+        err instanceof Error ? err.message : "Errore durante il caricamento."
+      );
     }
   };
 
@@ -59,7 +62,7 @@ export default function RimuoviCartaPage() {
     if (!carta) return;
     setError(null);
     try {
-      const res = await fetch(`http://localhost:8080/api/carte/${carta.id}`, {
+      const res = await fetch(apiUrl(`/api/carte/${carta.id}`), {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -68,9 +71,11 @@ export default function RimuoviCartaPage() {
       setCarta(null);
       setIdInput("");
       setStep("done");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(err.message || "Errore durante l'eliminazione.");
+      setError(
+        err instanceof Error ? err.message : "Errore durante l'eliminazione."
+      );
     }
   };
 
@@ -83,9 +88,9 @@ export default function RimuoviCartaPage() {
   };
 
   return (
-    <div className="lex flex-col h-full bg-white p-4 ">
-      <div className="container mx-auto flex-grow flex items-center justify-center">
-        <div className="bg-white p-6 max-w-lg w-full rounded shadow text-black">
+    <div className="content-panel p-4 sm:p-6">
+      <div className="mx-auto flex max-w-lg items-center justify-center">
+        <div className="w-full text-black">
           <h1 className="text-2xl font-bold mb-4">Rimuovi Carta</h1>
 
           {step === "search" && (
@@ -98,7 +103,7 @@ export default function RimuoviCartaPage() {
                   type="text"
                   value={idInput}
                   onChange={(e) => setIdInput(e.target.value)}
-                  className="w-full border rounded px-2 py-1"
+                  className="mt-2 min-h-11 w-full rounded-full border border-blue-100 px-4 py-2"
                   placeholder="Es. 123"
                   required
                 />
@@ -106,7 +111,7 @@ export default function RimuoviCartaPage() {
               {error && <p className="text-red-600">{error}</p>}
               <button
                 type="submit"
-                className="px-4 py-2 bg-indigo-600 text-white rounded"
+                className="min-h-11 rounded-full bg-blue-700 px-5 py-2 text-white hover:bg-blue-600"
               >
                 Carica Carta
               </button>
@@ -115,7 +120,7 @@ export default function RimuoviCartaPage() {
 
           {step === "confirm" && carta && (
             <div className="space-y-4">
-              <div className="border rounded p-4">
+              <div className="rounded-lg border border-blue-100 p-4">
                 <p>
                   <strong>ID:</strong> {carta.id}
                 </p>
@@ -135,7 +140,7 @@ export default function RimuoviCartaPage() {
                   <img
                     src={carta.urlImmagine}
                     alt={carta.nome}
-                    className="mt-2 max-h-40 object-contain border"
+                    className="mt-3 max-h-48 w-full rounded-lg border object-contain"
                   />
                 )}
               </div>
@@ -143,14 +148,17 @@ export default function RimuoviCartaPage() {
                 Sei sicuro di voler eliminare questa carta?
               </p>
               {error && <p className="text-red-600">{error}</p>}
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row">
                 <button
                   onClick={deleteCarta}
-                  className="px-4 py-2 bg-red-600 text-white rounded"
+                  className="min-h-11 rounded-full bg-red-600 px-5 py-2 text-white hover:bg-red-500"
                 >
                   Sì, elimina
                 </button>
-                <button onClick={resetAll} className="px-4 py-2 border rounded">
+                <button
+                  onClick={resetAll}
+                  className="min-h-11 rounded-full border border-blue-100 px-4 py-2"
+                >
                   Annulla
                 </button>
               </div>
@@ -162,7 +170,7 @@ export default function RimuoviCartaPage() {
               {success && <p className="text-green-600">{success}</p>}
               <button
                 onClick={resetAll}
-                className="px-4 py-2 bg-indigo-600 text-white rounded"
+                className="min-h-11 rounded-full bg-blue-700 px-5 py-2 text-white hover:bg-blue-600"
               >
                 Elimina un’altra carta
               </button>

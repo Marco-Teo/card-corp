@@ -34,20 +34,20 @@ const navigation = {
 
 export default function Footer() {
   return (
-    <footer className="bg-white ">
-      <div className=" container mx-auto flex items-center px-6 py-3">
-        <div className="xl:grid xl:grid-cols-3 xl:gap-8">
+    <footer className="relative z-20 mt-auto w-full border-t border-blue-100 bg-white/95 backdrop-blur">
+      <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
+        <div className="grid gap-8 lg:grid-cols-[1fr_2fr]">
           <div>
-            <img alt="Company name" src="/MARCO.svg" className="h-10 w-10" />
+            <img alt="CardCorp" src="/MARCO.svg" className="h-12 w-12" />
             <p className="mt-4 text-sm/6 text-gray-600">
               Seguici sui nostri socials
             </p>
-            <div className="flex mt-6 gap-6">
+            <div className="mt-5 flex flex-wrap gap-4">
               <a
                 href="https://x.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-700 hover:text-gray-800"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-700 hover:text-gray-800"
               >
                 <span className="sr-only">X</span>
                 <FaXTwitter size={24} />
@@ -56,7 +56,7 @@ export default function Footer() {
                 href="https://www.facebook.com/login"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-700 hover:text-gray-800"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-700 hover:text-gray-800"
               >
                 <span className="sr-only">Facebook</span>
                 <FaFacebook size={24} />
@@ -65,7 +65,7 @@ export default function Footer() {
                 href="https://www.youtube.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-700 hover:text-gray-800"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-700 hover:text-gray-800"
               >
                 <span className="sr-only">YouTube</span>
                 <FaYoutube size={24} />
@@ -74,7 +74,7 @@ export default function Footer() {
                 href="https://www.instagram.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-700 hover:text-gray-800"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-700 hover:text-gray-800"
               >
                 <span className="sr-only">Instagram</span>
                 <FaInstagram size={24} />
@@ -83,7 +83,7 @@ export default function Footer() {
                 href="https://www.tiktok.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-700 hover:text-gray-800"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 text-blue-700 hover:text-gray-800"
               >
                 <span className="sr-only">TikTok</span>
                 <SiTiktok size={24} />
@@ -91,13 +91,13 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
-            <div className="md:grid md:grid-cols-2 md:gap-8">
+          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+            <div>
               <div>
                 <h3 className="text-sm/6 font-semibold text-blue-700">
                   Solutions
                 </h3>
-                <ul role="list" className="mt-6 space-y-4">
+                <ul role="list" className="mt-4 space-y-3">
                   {navigation.solutions.map((item) => (
                     <li key={item.name}>
                       <a
@@ -110,11 +110,13 @@ export default function Footer() {
                   ))}
                 </ul>
               </div>
-              <div className="mt-10 md:mt-0">
+            </div>
+            <div>
+              <div>
                 <h3 className="text-sm/6 font-semibold text-blue-700">
                   Support
                 </h3>
-                <ul role="list" className="mt-6 space-y-4">
+                <ul role="list" className="mt-4 space-y-3">
                   {navigation.support.map((item) => (
                     <li key={item.name}>
                       <a
@@ -128,12 +130,12 @@ export default function Footer() {
                 </ul>
               </div>
             </div>
-            <div className="md:grid md:grid-cols-2 md:gap-8">
+            <div>
               <div>
                 <h3 className="text-sm/6 font-semibold text-blue-700">
                   Company
                 </h3>
-                <ul role="list" className="mt-6 space-y-4">
+                <ul role="list" className="mt-4 space-y-3">
                   {navigation.company.map((item) => (
                     <li key={item.name}>
                       <a
@@ -146,9 +148,11 @@ export default function Footer() {
                   ))}
                 </ul>
               </div>
-              <div className="mt-10 md:mt-0">
+            </div>
+            <div>
+              <div>
                 <h3 className="text-sm/6 font-semibold text-blue-700">Legal</h3>
-                <ul role="list" className="mt-6 space-y-4">
+                <ul role="list" className="mt-4 space-y-3">
                   {navigation.legal.map((item) => (
                     <li key={item.name}>
                       <a

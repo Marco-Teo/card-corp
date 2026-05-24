@@ -17,12 +17,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="it">
-      <body className="flex flex-col min-h-screen">
+      <body className="min-h-screen">
         <Providers>
-          <Header />
-          <FilterWrapper />
-          <main className="flex-grow bg-white">{children}</main>
-          <Footer />
+          <div className="site-shell">
+            <div className="dragon-backdrop" aria-hidden="true" />
+            <Header />
+            <div className="relative z-10 flex-1">
+              <FilterWrapper />
+              <main className="mx-auto w-full max-w-[960px] px-4 py-4 sm:px-6 lg:py-8">
+                {children}
+              </main>
+            </div>
+            <Footer />
+          </div>
         </Providers>
       </body>
     </html>

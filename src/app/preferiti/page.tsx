@@ -2,12 +2,18 @@
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setCarte, setFavorites, toggleFavorite } from "../state/cartaSlice";
+import {
+  Carta,
+  setCarte,
+  setFavorites,
+  toggleFavorite,
+} from "../state/cartaSlice";
 import type { RootState, AppDispatch } from "../state/store";
 import { addItem } from "../state/cartSlice";
 import { FaHeart } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { LiaCartPlusSolid } from "react-icons/lia";
+import { apiUrl } from "../lib/api";
 
 export default function Preferiti() {
   const dispatch = useDispatch<AppDispatch>();
@@ -32,13 +38,13 @@ export default function Preferiti() {
     if (!userId || !token) return;
     (async () => {
       const resp = await fetch(
-        `http://localhost:8080/users/${userId}/favorites`,
+        apiUrl(`/users/${userId}/favorites`),
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      const data = await resp.json();
+      const data = (await resp.json()) as Carta[];
       dispatch(setCarte(data));
-      dispatch(setFavorites(data.map((c: any) => c.id)));
+      dispatch(setFavorites(data.map((c) => c.id)));
     })().catch(console.error);
   }, [dispatch, userId, token]);
 
@@ -51,7 +57,7 @@ export default function Preferiti() {
   const handleRemoveFavorite = async (cartaId: number) => {
     if (!userId || !token) return;
     const resp = await fetch(
-      `http://localhost:8080/users/${userId}/favorites/${cartaId}`,
+      apiUrl(`/users/${userId}/favorites/${cartaId}`),
       {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
@@ -63,43 +69,58 @@ export default function Preferiti() {
     } else console.error(`Del fav error: ${resp.status}`);
   };
 
-  const handleAddToCart = (c: any) => {
+  const handleAddToCart = (c: Carta) => {
     dispatch(addItem({ ...c, quantita: 1 }));
     setToastMsg("Aggiunto al carrello!");
   };
 
+  const gridClassName =
+    carte.length === 1
+      ? "grid grid-cols-1 justify-items-center gap-4"
+      : carte.length === 2
+      ? "grid grid-cols-1 gap-4 sm:grid-cols-2"
+      : "card-grid";
+
+  const cardClassName =
+    carte.length === 1
+      ? "w-full max-w-sm"
+      : carte.length === 2
+      ? "w-full"
+      : "";
+
   return (
-    <div className="bg-white py-8 flex flex-col min-h-screen">
+    <div className="content-panel flex min-h-[50vh] flex-col p-4 sm:p-5">
       {toastMsg && (
-        <div className="fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded shadow-lg">
+        <div className="fixed bottom-4 left-4 right-4 z-50 rounded-lg bg-green-600 px-4 py-3 text-center text-white shadow-lg sm:left-auto sm:right-4">
           {toastMsg}
         </div>
       )}
-      <div className="container mx-auto px-4 mb-6">
-        <div className="flex items-center justify-center gap-2 text-lg font-medium text-black">
+      <div className="mb-5">
+        <div className="flex items-center justify-center gap-2 text-lg font-semibold text-black">
           <span>I tuoi preferiti</span>
           <FaHeart className="text-blue-700" />
         </div>
       </div>
-      <div className="container mx-auto px-4 flex-1">
+      <div className="flex-1">
         {carte.length === 0 ? (
           <p className="text-center text-gray-500">
             Non hai ancora aggiunto preferiti.
           </p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {carte.map((carta: any) => {
+          <div className={gridClassName}>
+            {carte.map((carta) => {
               const isFav = favorites.includes(carta.id);
               const bgColor = bgByRarita[carta.rarita] || "bg-gray-500";
               return (
-                <div
+                <article
                   key={carta.id}
-                  className={`${bgColor} p-4 rounded-lg shadow-md`}
+                  className={`${cardClassName} ${bgColor} overflow-hidden rounded-lg p-2 shadow-md`}
                 >
-                  <div className="relative flex justify-center p-4 bg-white rounded-t-lg shadow-sm">
+                  <div className="relative flex aspect-[4/3] items-center justify-center rounded-t-md bg-white p-3 shadow-sm">
                     <button
                       onClick={() => handleRemoveFavorite(carta.id)}
-                      className="absolute top-2 right-2"
+                      className="absolute right-2 top-2 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-sm"
+                      aria-label="Rimuovi dai preferiti"
                     >
                       {isFav ? (
                         <FaHeart size={24} className="text-blue-700" />
@@ -112,28 +133,33 @@ export default function Preferiti() {
                         carta.urlImmagine || "https://via.placeholder.com/150"
                       }
                       alt={carta.nome}
-                      className="h-48 object-contain"
+                      className="h-full max-h-52 w-full object-contain"
                     />
                   </div>
-                  <div className="p-5 bg-white">
-                    <h5 className="text-xl font-bold text-black mb-2">
+                  <div className="min-h-48 bg-white p-4">
+                    <h5 className="mb-2 line-clamp-2 text-lg font-bold text-black">
                       {carta.nome}
                     </h5>
-                    <p className="text-black mb-1 h-40">{carta.descrizione}</p>
-                    <p className="text-black mb-3">
+                    <p className="mb-3 line-clamp-4 text-sm leading-6 text-gray-700">
+                      {carta.descrizione}
+                    </p>
+                    <p className="text-sm font-medium text-gray-900">
                       Rarità: {carta.rarita.replace(/_/g, " ")}
                     </p>
                   </div>
-                  <div className="flex justify-between items-center p-3 bg-white rounded-b-lg">
-                    <p className="text-black">€ {carta.prezzo.toFixed(2)}</p>
+                  <div className="flex items-center justify-between rounded-b-md bg-white p-4 pt-0">
+                    <p className="font-semibold text-black">
+                      € {carta.prezzo.toFixed(2)}
+                    </p>
                     <button
                       onClick={() => handleAddToCart(carta)}
-                      className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-700 text-white hover:bg-blue-800"
+                      className="flex h-11 w-11 items-center justify-center rounded-full bg-blue-700 text-white hover:bg-blue-800"
+                      aria-label="Aggiungi al carrello"
                     >
                       <LiaCartPlusSolid size={20} />
                     </button>
                   </div>
-                </div>
+                </article>
               );
             })}
           </div>

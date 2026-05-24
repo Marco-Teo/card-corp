@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { apiUrl } from "../lib/api";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -31,7 +32,7 @@ export default function RegisterForm() {
     }
 
     try {
-      const resp = await fetch("http://localhost:8080/register", {
+      const resp = await fetch(apiUrl("/register"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -41,18 +42,18 @@ export default function RegisterForm() {
         throw new Error(err.message || `Errore ${resp.status}`);
       }
       router.push("/");
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error("Registrazione fallita:", e);
-      setError(e.message || "Qualcosa è andato storto");
+      setError(e instanceof Error ? e.message : "Qualcosa è andato storto");
     }
   };
 
   return (
-    <div className="bg-white p-4">
-      <div className="container mx-auto">
+    <div className="content-panel p-4 sm:p-6">
+      <div className="mx-auto max-w-2xl">
         <form
           onSubmit={handleSubmit}
-          className="space-y-12 p-6 bg-white rounded-md shadow"
+          className="space-y-8"
         >
           <div className="border-b border-gray-200 pb-6">
             <h2 className="text-lg font-semibold text-gray-900">Profile</h2>
@@ -77,7 +78,7 @@ export default function RegisterForm() {
                   required
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
-                  className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white-opacity-50"
+                  className="mt-2 block min-h-11 w-full rounded-full bg-blue-700 px-4 py-2 text-white placeholder:text-blue-100"
                   placeholder="GokuFan"
                 />
               </div>
@@ -99,7 +100,7 @@ export default function RegisterForm() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white-opacity-50"
+                className="mt-2 block min-h-11 w-full rounded-full bg-blue-700 px-4 py-2 text-white placeholder:text-blue-100"
                 placeholder="Password"
               />
             </div>
@@ -117,7 +118,7 @@ export default function RegisterForm() {
                 required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white-opacity-50"
+                className="mt-2 block min-h-11 w-full rounded-full bg-blue-700 px-4 py-2 text-white placeholder:text-blue-100"
                 placeholder="Password"
               />
             </div>
@@ -147,7 +148,7 @@ export default function RegisterForm() {
                   required
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white-opacity-50"
+                  className="mt-2 block min-h-11 w-full rounded-full bg-blue-700 px-4 py-2 text-white placeholder:text-blue-100"
                   placeholder="Mario "
                 />
               </div>
@@ -167,7 +168,7 @@ export default function RegisterForm() {
                   required
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
-                  className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white-opacity-50"
+                  className="mt-2 block min-h-11 w-full rounded-full bg-blue-700 px-4 py-2 text-white placeholder:text-blue-100"
                   placeholder="Rossi"
                 />
               </div>
@@ -187,7 +188,7 @@ export default function RegisterForm() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white-opacity-50"
+                  className="mt-2 block min-h-11 w-full rounded-full bg-blue-700 px-4 py-2 text-white placeholder:text-blue-100"
                   placeholder="mario.rossi@qualcosa.com"
                 />
               </div>
@@ -207,7 +208,7 @@ export default function RegisterForm() {
                   required
                   value={indirizzo}
                   onChange={(e) => setIndirizzo(e.target.value)}
-                  className="mt-2 block w-full rounded-md bg-blue-700 text-white p-1 placeholder:text-white-opacity-50"
+                  className="mt-2 block min-h-11 w-full rounded-full bg-blue-700 px-4 py-2 text-white placeholder:text-blue-100"
                   placeholder="Via Vattelapesca n° 5"
                 />
               </div>
@@ -216,17 +217,17 @@ export default function RegisterForm() {
 
           {error && <p className="text-red-600 text-center">{error}</p>}
 
-          <div className="mt-6 flex justify-end gap-x-4">
+          <div className="mt-6 flex flex-col justify-end gap-3 sm:flex-row">
             <button
               type="button"
-              className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+              className="min-h-11 rounded-full px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
               onClick={() => router.back()}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded hover:bg-indigo-500"
+              className="min-h-11 rounded-full bg-blue-700 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-600"
             >
               Save
             </button>

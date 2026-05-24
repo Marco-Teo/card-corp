@@ -29,16 +29,16 @@ export default function DropDownMenu({
 
   return (
     <>
-      <label className="block text-sm font-medium text-blue-700 mb-2">
+      <label className="mb-2 block text-sm font-medium text-blue-700">
         {label}
       </label>
-      <Menu as="div" className="relative inline-block text-left w-full">
-        <MenuButton className="inline-flex w-full justify-between items-center gap-x-1.5 rounded-md bg-blue-700 px-3 py-2 text-sm font-semibold text-white shadow-xs ring-1 ring-gray-300 hover:bg-blue-100 hover:text-black">
-          <span>{currentLabel}</span>
-          <ChevronDownIcon className="h-5 w-5 text-gray-400" />
+      <Menu as="div" className="relative inline-block w-full text-left">
+        <MenuButton className="inline-flex min-h-11 w-full items-center justify-between gap-x-1.5 rounded-full bg-blue-700 px-4 py-2 text-sm font-semibold text-white shadow-xs ring-1 ring-blue-700 hover:bg-blue-800">
+          <span className="truncate">{currentLabel}</span>
+          <ChevronDownIcon className="h-5 w-5 shrink-0 text-blue-100" />
         </MenuButton>
 
-        <MenuItems className="absolute right-0 z-10 mt-1 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
+        <MenuItems className="absolute right-0 z-30 mt-1 w-full origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
           <div className="py-1">
             {options.map((opt) => (
               <MenuItem key={opt.value} as={Fragment}>
@@ -47,7 +47,7 @@ export default function DropDownMenu({
                     type="button"
                     className={`${
                       active ? "bg-blue-100 text-blue-900" : "text-gray-700"
-                    } block w-full text-left px-4 py-2 text-sm`}
+                    } block w-full px-4 py-2 text-left text-sm`}
                     onClick={() =>
                       onChange({ target: { name, value: opt.value } })
                     }

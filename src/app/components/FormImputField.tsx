@@ -28,7 +28,7 @@ export default function FormImputField({
 }: FormImputFieldProps) {
   const IconComponent = iconMap[iconName];
   return (
-    <div className="flex flex-col ">
+    <div className="flex min-w-0 flex-col">
       <label className="block text-sm/6 font-medium text-blue-700">
         {label}
       </label>
@@ -40,7 +40,7 @@ export default function FormImputField({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className="col-start-1 row-start-1 block w-full rounded-md bg-blue-700 py-1.5 pr-3 pl-10 text-base text-white outline-1 -outline-offset-1 outline-white placeholder:text-white focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:pl-9 sm:text-sm/6"
+          className="col-start-1 row-start-1 block min-h-11 w-full rounded-full bg-blue-700 py-2 pr-3 pl-10 text-base text-white outline-1 -outline-offset-1 outline-white placeholder:text-blue-100 focus:outline-2 focus:-outline-offset-2 focus:outline-yellow-300 sm:pl-9 sm:text-sm/6"
         />
         <IconComponent
           aria-hidden="true"

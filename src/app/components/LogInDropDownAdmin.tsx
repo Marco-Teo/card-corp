@@ -35,33 +35,33 @@ export default function LogInDropDownAdmin({ onClose }: Props) {
   };
 
   return (
-    <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-10">
+    <div className="absolute right-0 z-30 mt-2 w-52 overflow-hidden rounded-lg border border-blue-100 bg-white shadow-lg">
       <Link
         href="/creazioneCarta"
         onClick={handleAddCard}
-        className="flex items-center w-full px-3 py-2 hover:bg-gray-100 text-black"
+        className="flex min-h-11 w-full items-center px-3 py-2 text-black hover:bg-blue-50"
       >
         <FiPlusCircle className="mr-2 text-green-600" /> Aggiungi Carta
       </Link>
       <Link
         href="/rimuoviCarta"
         onClick={handleRemoveCard}
-        className="flex items-center w-full px-3 py-2 hover:bg-gray-100 text-black"
+        className="flex min-h-11 w-full items-center px-3 py-2 text-black hover:bg-blue-50"
       >
         <FiTrash2 className="mr-2 text-red-600" /> Rimuovi Carta
       </Link>
 
-      <a
+      <Link
         href="/"
         onClick={() => {
           dispatch(logOut());
           dispatch(toggleMenu());
         }}
-        className="flex items-center px-3 py-2 hover:bg-gray-100 text-black"
+        className="flex min-h-11 items-center px-3 py-2 text-black hover:bg-blue-50"
       >
         <FiLogOut className="mr-2 text-blue-600" />
         Log out
-      </a>
+      </Link>
     </div>
   );
 }
