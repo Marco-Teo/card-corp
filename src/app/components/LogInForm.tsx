@@ -15,7 +15,7 @@ export default function LogInForm({ onClose }: LogInFormProps) {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -27,7 +27,7 @@ export default function LogInForm({ onClose }: LogInFormProps) {
       const resp = await fetch(apiUrl("/login"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: identifier, password }),
       });
       if (!resp.ok) {
         const err = await resp.json();
@@ -85,19 +85,20 @@ export default function LogInForm({ onClose }: LogInFormProps) {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
-                htmlFor="email"
+                htmlFor="identifier"
                 className="block text-sm/6 font-medium text-gray-900"
               >
-                Email
+                Nome utente o email
               </label>
               <div className="mt-2">
                 <input
-                  id="email"
-                  name="email"
-                  type="email"
+                  id="identifier"
+                  name="identifier"
+                  type="text"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="username"
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
                   className="block min-h-11 w-full rounded-full bg-white px-4 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-blue-100 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-700 sm:text-sm/6"
                 />
               </div>
